@@ -22,5 +22,4 @@ const Home: FC<HomeProps> = () => {
         </div>
     );
 }
-
 export default Home;

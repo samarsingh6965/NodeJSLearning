@@ -16,12 +16,12 @@ const App: FC<AppProps> = () => {
       <div className='h-[94vh] px-6 py-3 overflow-y-auto'>
         <Router />
       </div>
-      <ToastContainer 
+      <ToastContainer
         position="top-right"
         autoClose={1000}
         hideProgressBar={false}
         theme="light"
-        />
+      />
     </div>
   );
 }

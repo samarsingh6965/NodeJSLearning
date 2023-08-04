@@ -64,8 +64,6 @@ const Navbar: FC<NavbarProps> = () => {
                         >
                             <FaBars className='text-xl' />
                         </button>
-                        {/* Desktop menu */}
-
                     </div>
                 </div>
 
