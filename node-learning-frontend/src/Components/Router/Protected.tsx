@@ -8,6 +8,8 @@ const Protected = (props:any) => {
     useEffect(() => {
         if (!login) {
             Navigate('/')
+        }else{
+            Navigate('/home')
         }
     }, []);
 

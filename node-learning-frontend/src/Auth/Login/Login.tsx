@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -11,13 +11,20 @@ import { responseType } from '../../Components/Common/Interfaces';
 interface LoginProps { }
 
 const Login: FC<LoginProps> = () => {
-
+    const navigate = useNavigate()
+    let login = sessionStorage.getItem('token');
+    useEffect(() => {
+        if (!login) {
+            navigate('/')
+        }else{
+            navigate('/home')
+        }
+    }, []);
     const LoginFormSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email').required('Required'),
         password: Yup.string().required('Required'),
     });
 
-    const navigate = useNavigate()
     const handleSubmit = async (values: any) => {
         try {
             const response: responseType = await http({
