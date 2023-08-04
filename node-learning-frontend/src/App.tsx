@@ -3,6 +3,7 @@ import './App.css';
 import Router from './Components/Router/Router';
 import Navbar from './Components/Common/Navbar';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface AppProps { }
 
@@ -15,15 +16,12 @@ const App: FC<AppProps> = () => {
       <div className='h-[92vh] px-6'>
         <Router />
       </div>
-      <ToastContainer
+      <ToastContainer 
         position="top-right"
         autoClose={1000}
         hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
         theme="light"
-      />
-      <ToastContainer />
+        />
     </div>
   );
 }

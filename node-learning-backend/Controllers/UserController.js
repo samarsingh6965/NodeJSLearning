@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
             response.handleSuccess(res, 'Registered Successfully', savedUser)
         }
     } catch (error) {
-        response.somethingWentWrong();
+        response.somethingWentWrong(res);
     }
 });
 
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
                 response.unAuthorized(res, 'Invalid Password.');
             } else {
                 const token = generateToken(user);
-                response.handleSuccess(res, 'User LoggedIn Successfully', { data: user, token: token });
+                response.handleSuccess(res, 'User LoggedIn Successfully', { user:{name:user?.username,id:user?._id,email:user?.email}, token: token });
             }
         }
     } catch (error) {

@@ -1,21 +1,44 @@
 import type { FC } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { NavLink } from 'react-router-dom';
-import Navbar from '../../Components/Common/Navbar';
+import { NavLink, useNavigate } from 'react-router-dom';
+import http from '../../Services/http';
+import { toast } from 'react-toastify';
+import { responseType } from '../../Components/Common/Interfaces';
 
-const LoginFormSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string().required('Required'),
-});
 
-const handleSubmit = (values: any) => {
-    console.log(values)
-}
 
 interface LoginProps { }
 
 const Login: FC<LoginProps> = () => {
+
+    const LoginFormSchema = Yup.object().shape({
+        email: Yup.string().email('Invalid email').required('Required'),
+        password: Yup.string().required('Required'),
+    });
+
+    const navigate = useNavigate()
+    const handleSubmit = async (values: any) => {
+        try {
+            const response: responseType = await http({
+                url: `/api/login`,
+                method: 'post',
+                data: values
+            }, true);
+            if (response.data?.code === 'SUCCESS_200') {
+                toast.success(response?.data?.message)
+                sessionStorage.setItem('token', response?.data?.data?.token)
+                sessionStorage.setItem('userDetails', JSON.stringify(response?.data?.data?.user))
+                setTimeout(() => {
+                    navigate('/home');
+                }, 2000);
+            } else {
+                toast.error(response?.data?.message)
+            }
+        } catch (error: any | unknown) {
+            toast.error((error as any)?.response?.data?.message);
+        }
+    }
     return (
         <div className="w-full h-full flex items-center overflow-hidden">
             <div className="md:w-[60%] hidden h-full md:flex items-center justify-center">

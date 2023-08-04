@@ -1,7 +1,8 @@
 class ServerResponseHandler {
     // success
     handleSuccess(res, message, data) {
-        return res.status(200).json({
+        return res?.status(200).json({
+            code: 'SUCCESS_200',
             success: true,
             data: data,
             message: message ? message : 'Request Successful'
@@ -10,40 +11,33 @@ class ServerResponseHandler {
 
     // not found
     handleNotFound(res, message) {
-        return res.status(404).json({
+        return res?.status(404).json({
+            code: 'ERROR_404',
             success: false,
-            error: {
-                message: message ? message : 'Resource not found.',
-            },
+            message: message ? message : 'Resource not found.',
         });
     }
 
     // something went wrong
     somethingWentWrong(res, message) {
-        return res.status(500).json({
+        return res?.status(500).json({
             success: false,
-            error: {
-                message: message ? message : 'Something Went Wrong.',
-            },
+            message: message ? message : 'Something Went Wrong.',
         });
     }
     // bad request
     badRequest(res, message) {
-        return res.status(400).json({
+        return res?.status(400).json({
             success: false,
-            error: {
-                message: message ? message : 'Bad Request',
-            },
+            message: message ? message : 'Bad Request',
         });
     }
 
     // unAuthorized
     unAuthorized(res, message) {
-        return res.status(401).json({
+        return res?.status(401).json({
             success: false,
-            error: {
-                message: message ? message : 'Token Not Found',
-            },
+            message: message ? message : 'Token Not Found',
         });
     }
 }

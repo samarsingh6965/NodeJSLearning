@@ -1,20 +1,43 @@
 import type { FC } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { responseType } from '../../Components/Common/Interfaces';
+import http from '../../Services/http';
+import { toast } from 'react-toastify';
 
-const LoginFormSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string().required('Required'),
-});
 
-const handleSubmit = (values: any) => {
-    console.log(values)
-}
+
 
 interface RegisterProps { }
 
 const Register: FC<RegisterProps> = () => {
+
+    const LoginFormSchema = Yup.object().shape({
+        username:Yup?.string().required('Name is Required'),
+        email: Yup.string().email('Invalid email').required('Email is Required'),
+        password: Yup.string().required('Password is Required'),
+    });
+    const navigate = useNavigate();
+    const handleSubmit = async (values: any) => {
+        try {
+            const response: responseType = await http({
+                url: `/api/register`,
+                method: 'post',
+                data: values
+            }, true);
+            if (response.data?.code === 'SUCCESS_200') {
+                toast.success(response?.data?.message)
+                setTimeout(() => {
+                    navigate('/');
+                }, 2000);
+            } else {
+                toast.error(response?.data?.message)
+            }
+        } catch (error: any | unknown) {
+            toast.error((error as any)?.response?.data?.message);
+        }
+    }
     return (
         <div className="w-full h-full flex items-center overflow-hidden">
             <div className="sm:w-[60%] hidden h-full sm:flex items-center justify-center">
@@ -23,7 +46,7 @@ const Register: FC<RegisterProps> = () => {
             <div className="sm:w-[40%] w-full h-full flex items-center justify-center">
                 <div className="w-full mx-auto mt-8">
                     <Formik
-                        initialValues={{ name: '', email: '', password: '' }}
+                        initialValues={{ username: '', email: '', password: '' }}
                         validationSchema={LoginFormSchema}
                         onSubmit={handleSubmit}
                     >
@@ -34,11 +57,11 @@ const Register: FC<RegisterProps> = () => {
                                 </label>
                                 <Field
                                     type="text"
-                                    name="name"
-                                    id="name"
+                                    name="username"
+                                    id="username"
                                     className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 />
-                                <ErrorMessage name="name" component="div" className="text-red-500 text-xs mt-1" />
+                                <ErrorMessage name="username" component="div" className="text-red-500 text-xs mt-1" />
                             </div>
                             <div className="mb-4">
                                 <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
