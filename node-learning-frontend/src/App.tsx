@@ -10,10 +10,10 @@ interface AppProps { }
 const App: FC<AppProps> = () => {
   return (
     <div className='w-screen h-screen'>
-      <div className="h-[8vh] sticky top-0">
+      <div className="h-[6vh] sticky top-0">
         <Navbar />
       </div>
-      <div className='h-[92vh] px-6'>
+      <div className='h-[94vh] px-6 py-3 overflow-y-auto'>
         <Router />
       </div>
       <ToastContainer 
