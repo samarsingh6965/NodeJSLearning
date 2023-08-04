@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const ServerResponseHandler = require("../ServerResponse/ServerResponse");
+const response = new ServerResponseHandler();
 const generateToken = (user) => {
     const payload = {
         userId: user._id,
@@ -10,5 +12,21 @@ const generateToken = (user) => {
     };
     return jwt.sign(payload, 'your_secret_key', options);
 };
-
-module.exports = generateToken;
+const verifyToken = (req, res, next) => {
+    const token = req.header('token');
+    // console.log(token)
+    if (!token) {
+        return response.unAuthorized(res, 'Access denied. Token is missing.');
+    }
+    try {
+        const decoded = jwt.verify(token, 'your_secret_key'); // Replace with your secret key
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return response.unauthorized(res, 'Access denied. Invalid token.');
+    }
+};
+module.exports = {
+    generateToken,
+    verifyToken
+}

@@ -2,16 +2,14 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const router = require('./Router/Router')
 app.use(cors());
-const user = require('./Controllers/UserController')
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); 
 // db connection
 require('./Database/Db')
 
-app.use("/api",user)
-
-
+app.use('/api',router)
 
 
 
