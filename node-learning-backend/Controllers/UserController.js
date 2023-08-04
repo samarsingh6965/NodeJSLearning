@@ -12,7 +12,7 @@ router.get('/getusers', async (req, res) => {
         const users = await User.find({});
         return response.handleSuccess(res, 'Users fetched Successfully', users);
     } catch (error) {
-        return response.somethingWentWrong()
+        return response.somethingWentWrong(res,)
     }
 });
 

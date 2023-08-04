@@ -21,6 +21,7 @@ class ServerResponseHandler {
     // something went wrong
     somethingWentWrong(res, message) {
         return res?.status(500).json({
+            code: 'ERROR_500',
             success: false,
             message: message ? message : 'Something Went Wrong.',
         });
@@ -28,6 +29,7 @@ class ServerResponseHandler {
     // bad request
     badRequest(res, message) {
         return res?.status(400).json({
+            code: 'ERROR_400',
             success: false,
             message: message ? message : 'Bad Request',
         });
@@ -36,6 +38,7 @@ class ServerResponseHandler {
     // unAuthorized
     unAuthorized(res, message) {
         return res?.status(401).json({
+            code: 'ERROR_401',
             success: false,
             message: message ? message : 'Token Not Found',
         });
