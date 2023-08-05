@@ -52,10 +52,17 @@ const Navbar: FC<NavbarProps> = () => {
                             :
                             null
                         }
-                        <Link to={'/addCard'} className='text-lg font-medium'>Add New Card</Link> |
-                        <div>
-                            <button className="text-white py-1 font-medium hover:text-amber-300" onClick={handleLogOut}>Logout</button>
-                        </div>
+                        {
+                            token !== '' ?
+                                <>
+                                    <Link to={'/addCard'} className='text-lg font-medium'>Add New Card</Link> |
+                                    <div>
+                                        <button className="text-white py-1 font-medium hover:text-amber-300" onClick={handleLogOut}>Logout</button>
+                                    </div>
+                                </>
+                                :
+                                null
+                        }
                     </div>
                     {/* Mobile menu button */}
                     <div className="lg:hidden flex items-center">
@@ -79,17 +86,19 @@ const Navbar: FC<NavbarProps> = () => {
                     </div>
                     <div className="lg:hidden flex flex-col gap-1 items-start">
                         {token !== '' ?
-                            <div className='flex items-center gap-2 py-1'>
-                                <img
-                                    src={avatar}
-                                    alt="User Avatar"
-                                    className="w-8 h-8 rounded-full"
-                                />
-                                <span className="font-bold">{user.name}</span>
-                            </div>
+                            <>
+                                <div className='flex items-center gap-2 py-1'>
+                                    <img
+                                        src={avatar}
+                                        alt="User Avatar"
+                                        className="w-8 h-8 rounded-full"
+                                    />
+                                    <span className="font-bold">{user.name}</span>
+                                </div>
+                                <button className="text-white py-1 font-medium hover:text-amber-300" onClick={handleLogOut}>Logout</button>
+                            </>
                             : null
                         }
-                        <button className="text-white py-1 font-medium hover:text-amber-300" onClick={handleLogOut}>Logout</button>
                     </div>
                 </div>
             )}
