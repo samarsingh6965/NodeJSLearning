@@ -16,14 +16,14 @@ const verifyToken = (req, res, next) => {
     const token = req.header('token');
     // console.log(token)
     if (!token) {
-        return response.unAuthorized(res, 'Access denied. Token is missing.');
+        response.unAuthorized(res, 'Access denied. Token is missing.');
     }
     try {
         const decoded = jwt.verify(token, 'your_secret_key'); // Replace with your secret key
         req.user = decoded;
         next();
     } catch (error) {
-        return response.unauthorized(res, 'Access denied. Invalid token.');
+        response.unAuthorized(res, 'Access denied. Invalid token.');
     }
 };
 module.exports = {

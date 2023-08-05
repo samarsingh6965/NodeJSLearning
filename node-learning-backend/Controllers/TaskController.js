@@ -5,9 +5,9 @@ const verifyToken = require('../JWT/index')
 
 
 
-module.exports={
+module.exports = {
 
-   getTasks: async (req, res) => {
+    getTasks: async (req, res) => {
         try {
             const tasks = await Task.find({});
             return response.handleSuccess(res, 'Tasks fetched Successfully', tasks);
@@ -15,7 +15,7 @@ module.exports={
             return response.somethingWentWrong(res)
         }
     },
-    
+
     addTask: async (req, res) => {
         try {
             const { title, description } = req.body;
@@ -28,39 +28,52 @@ module.exports={
         } catch (error) {
             response.somethingWentWrong(res);
         }
-    }
+    },
+    getOneTask: async (req, res) => {
+        try {
+            const taskId = req.query.id; // Assuming you're passing the task _id as a URL parameter
+            const task = await Task.findById(taskId); // Query the database using the _id
+            if (!task) {
+                return response.notFound(res, 'Task not found');
+            }
+            response.handleSuccess(res, 'Task Fetched Successfully', task);
+        } catch (error) {
+            response.somethingWentWrong(res);
+        }
+    },
 
+    // Update by taskId
+    editTask: async (req, res) => {
+        try {
+            const { title, description } = req.body;
+            const task = await Task.findByIdAndUpdate(req.body.id, { title, description }, { new: true });
+            if (!task) {
+                response.handleNotFound(res, 'Task Not Found')
+            }
+            response.handleSuccess(res, 'Task Updated', task)
+        } catch (error) {
+            response.somethingWentWrong(res)
+        }
+    },
+    // Delete by taskId
+    deleteTask: async (req, res) => {
+        try {
+            const taskId = req.body.id;
+            const deletedTask = await Task.findByIdAndRemove(taskId);
+            if (!deletedTask) {
+                response.handleNotFound(res, 'Task Not Found');
+            } else {
+                response.handleSuccess(res, 'Task Deleted', deletedTask);
+            }
+        } catch (error) {
+            console.error(error); // Debugging
+            response.somethingWentWrong(res);
+        }
+    }
 
 }
 
 
 
-// Update user by taskId
-// router.put('/tasks/:taskId', async (req, res, next) => {
-//     try {
-//         const taskId = req.params.taskId;
-//         const { username, email, password } = req.body;
-//         const user = await User.findByIdAndUpdate(taskId, { username, email, password }, { new: true });
-//         if (!user) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }
-//         return res.status(200).json({ message: 'User updated', user });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+// 
 
-// // Delete user by taskId
-// router.delete('/tasks/:taskId', async (req, res, next) => {
-//     try {
-//         const taskId = req.params.taskId;
-//         const deletedUser = await User.findByIdAndRemove(taskId);
-//         if (!deletedUser) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }
-
-//         return res.status(200).json({ message: 'User deleted', deletedUser });
-//     } catch (error) {
-//         next(error); // Pass the error to the default error handler
-//     }
-// });

@@ -1,14 +1,19 @@
-import type { FC } from 'react';
+import { useContext, type FC, useState, useEffect } from 'react';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { responseType } from '../Common/Interfaces';
+import { useNavigate, useParams } from 'react-router-dom';
+import { responseType, taskType } from '../Common/Interfaces';
 import http from '../../Services/http';
+import MyContext from '../../Context/DataContext';
 
 interface FormPageProps { }
 
 const FormPage: FC<FormPageProps> = () => {
+    const {isRender,setIsRender} = useContext(MyContext);
+    const [ediTaskData,setEdittaskData] = useState<taskType|null>(null)
+    const {_id} = useParams();
+    
     const initialValues = {
         title: '',
         description: '',
@@ -21,25 +26,72 @@ const FormPage: FC<FormPageProps> = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async (values: any, { resetForm }: any) => {
+        if(ediTaskData !== null){
+            values['id'] = ediTaskData?._id
+            try {
+                const response: responseType = await http({
+                    url: `/api/edittask`,
+                    method: 'put',
+                    data: values
+                }, false);
+                if (response.data?.code === 'SUCCESS_200') {
+                    toast.success(response?.data?.message)
+                    setIsRender(!isRender)
+                    setTimeout(() => {
+                        navigate('/home');
+                        resetForm();
+                    }, 2000);
+                } else {
+                    toast.error(response?.data?.message)
+                }
+            } catch (error: any | unknown) {
+                toast.error((error as any)?.response?.data?.message);
+            }
+        }else{
+            try {
+                const response: responseType = await http({
+                    url: `/api/addtask`,
+                    method: 'post',
+                    data: values
+                }, false);
+                if (response.data?.code === 'SUCCESS_200') {
+                    toast.success(response?.data?.message)
+                    setIsRender(!isRender)
+                    setTimeout(() => {
+                        navigate('/home');
+                        resetForm();
+                    }, 2000);
+                } else {
+                    toast.error(response?.data?.message)
+                }
+            } catch (error: any | unknown) {
+                toast.error((error as any)?.response?.data?.message);
+            }
+        }
+    };
+    const fetchTaskToEdit = async () => {
         try {
             const response: responseType = await http({
-                url: `/api/addtask`,
-                method: 'post',
-                data: values
+                url: `/api/getonetask`,
+                method: 'get',
+                data: {id:_id}
             }, false);
             if (response.data?.code === 'SUCCESS_200') {
-                toast.success(response?.data?.message)
-                setTimeout(() => {
-                    navigate('/home');
-                    resetForm();
-                }, 2000);
+                setEdittaskData(response.data?.data)
+                initialValues.title = response.data?.data?.title;
+                initialValues.description = response.data?.data?.description;
             } else {
                 toast.error(response?.data?.message)
             }
         } catch (error: any | unknown) {
             toast.error((error as any)?.response?.data?.message);
         }
-    };
+    }
+    useEffect(()=>{
+        if(_id){
+            fetchTaskToEdit();
+        }
+    },[_id])
     return (
         <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-semibold mb-4">Create a New Item</h2>
@@ -80,7 +132,7 @@ const FormPage: FC<FormPageProps> = () => {
                         type="submit"
                         className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
                     >
-                        Submit
+                        {ediTaskData !== null ? 'Update' : 'Submit'}
                     </button>
                 </Form>
             </Formik>

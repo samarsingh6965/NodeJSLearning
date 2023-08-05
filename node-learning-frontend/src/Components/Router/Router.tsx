@@ -14,6 +14,7 @@ const Router: FC<RouterProps> = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Protected Component={Home} />} />
             <Route path="/addCard" element={<FormPage />} />
+            <Route path="/editCard/:_id" element={<FormPage/>} />
         </Routes>
     );
 }

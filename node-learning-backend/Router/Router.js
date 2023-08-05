@@ -18,7 +18,10 @@ router.get('/getusers', user.getUser);
 // tasks
 
 router.get("/gettasks",task.getTasks);
+router.get("/getonetask",task.getOneTask);
 router.post("/addtask",task.addTask);
+router.put('/edittask',task.editTask);
+router.delete('/deletetask',task.deleteTask);
 
 
 module.exports = router;
