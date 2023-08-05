@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import avatar from '../../Assets/male avatar.jpg'
 import { FaBars } from 'react-icons/fa'
 import { toast } from 'react-toastify';
+import logo from '../../Assets/logo.jpg'
 
 
 // Example user details (Replace with actual user data)
@@ -28,7 +29,7 @@ const Navbar: FC<NavbarProps> = () => {
                 {/* Logo or brand */}
                 <div className="flex">
                     <Link to={'/home'} className="text-xl flex gap-3 font-bold items-center">
-                        <img src="https://banner2.cleanpng.com/20180425/jrw/kisspng-node-js-javascript-web-application-express-js-comp-5ae0f84e2a4242.1423638015246930701731.jpg" className='w-8 h-8 rounded-full' alt="logo" />
+                        <img src={logo} className='w-8 h-8 rounded-full' alt="logo" />
                         <p className='text-xl'>Node JS</p>
                     </Link>
                 </div>
