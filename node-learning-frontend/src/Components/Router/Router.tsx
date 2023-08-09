@@ -5,6 +5,7 @@ import Register from '../../Auth/Register/Register';
 import Home from '../Home/Home';
 import Protected from './Protected';
 import FormPage from '../Form/Form';
+import Chat from '../Chat/Chat';
 interface RouterProps { }
 
 const Router: FC<RouterProps> = () => {
@@ -15,6 +16,7 @@ const Router: FC<RouterProps> = () => {
             <Route path="/home" element={<Protected Component={Home} />} />
             <Route path="/addCard" element={<FormPage />} />
             <Route path="/editCard/:_id" element={<FormPage/>} />
+            <Route path="/chat" element={<Chat/>} />
         </Routes>
     );
 }
