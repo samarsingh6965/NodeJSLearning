@@ -18,16 +18,12 @@ function Chat(): JSX.Element {
         socket.on('connect', () => {
             console.log('Connected to the WebSocket server');
         });
-
-
         return () => {
-            // Clean up event listeners when component unmounts
             socket.off('message');
         };
     }, []);
 
     const sendMessage = (message: string): void => {
-        // Emit a 'message' event to the server
         socket.emit('message', message);
     };
 
